@@ -1,0 +1,91 @@
+---
+import getCourseConfig from "../data/course";
+import Corner from "@components/corner.astro";
+import { getSections } from "src/data/lessons";
+import Layout from "src/layouts/layout.astro";
+
+const courseInfo = getCourseConfig();
+const sections = await getSections();
+---
+
+<html lang='en'>
+  <head
+    ><title>{courseInfo.title}</title>
+    <meta name='description' content={courseInfo.description} /><meta
+      name='keywords'
+      content={courseInfo.keywords.join(",")}
+    /><meta name='og:description' content={courseInfo.description} /><meta
+      name='og:title'
+      content={courseInfo.title}
+    /><meta name='og:image' content={`/images/social-share-cover.jpg`} /><meta
+      name='twitter:card'
+      content='summary_large_image'
+    /></head
+  >
+  <Layout>
+    <div>
+      <div class='jumbotron'>
+        <div class='courseInfo'>
+          <div class='courseInfo-inner'>
+            <h1>{courseInfo.title}</h1>
+            <h2>{courseInfo.subtitle}</h2>
+            <div class='author'>
+              <div class='image'>
+                <img
+                  src={`/images/author.jpg`}
+                  alt='author image'
+                  class='image'
+                />
+              </div>
+              <div class='info'>
+                <div class='name'>{courseInfo.author.name}</div>
+                <div class='company'>{courseInfo.author.company}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='courseIcon'>
+          <img src={`/images/course-icon.png`} alt='course icon' />
+        </div>
+      </div>
+      {
+        courseInfo.frontendMastersLink ? (
+          <a href={courseInfo.frontendMastersLink} class='cta-btn'>
+            Watch on Frontend Masters
+          </a>
+        ) : null
+      }
+      <div class='main-card'>
+        <h1 class='lesson-title'>Table of Contents</h1>
+        <div class='lesson-content'>
+          <ol class='sections-name'>
+            {
+              sections.map((section) => (
+                <li>
+                  <div class='lesson-details'>
+                    <div class='lesson-preface'>
+                      <i class={`fas fa-${section.icon}`} />
+                    </div>
+                    <div class='lesson-text'>
+                      <h2 class='lesson-section-title'>{section.title}</h2>
+                      <ol>
+                        {section.lessons.map((lesson) => (
+                          <li>
+                            <a href={lesson.slug}>{lesson.title}</a>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                    <Corner />
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+  </Layout>
+
+
+</html>

@@ -1,0 +1,24 @@
+---
+import Footer from "@components/footer.astro";
+import Header from "@components/header.astro";
+import "@fortawesome/fontawesome-free/css/all.css";
+import getCourseConfig from "src/data/course";
+import "../styles/courses.css";
+import "../styles/footer.css";
+import "../styles/variables.css";
+
+const courseInfo = getCourseConfig();
+---
+
+<div class='remix-app'>
+  <Header title={courseInfo.title} />
+  <div class='content-container'>
+    <div class='main'><slot /></div>
+  </div>
+  <Footer
+    twitter={courseInfo.social.twitter}
+    github={courseInfo.social.github}
+    linkedin={courseInfo.social.linkedin}
+    bluesky={courseInfo.social.bluesky}
+  />
+</div>

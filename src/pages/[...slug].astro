@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import {} from "../data/lessons";
+import Corner from "@components/corner.astro";
+import Layout from "src/layouts/layout.astro";
+
+export async function getStaticPaths() {
+  const lessonsEntries = await getCollection("lessons");
+  return lessonsEntries.map((entry, i) => ({
+    params: { slug: entry.slug },
+    props: {
+      entry,
+      prevSlug: lessonsEntries[i - 1]?.slug,
+      nextSlug: lessonsEntries[i + 1]?.slug,
+    },
+  }));
+}
+
+const { entry, prevSlug, nextSlug } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<head>
+  <title>{entry.data.title}</title>
+  <meta name='description' content={entry.data.description} /></head
+>
+<meta name='keywords' content={entry.data.keywords?.join(",")} />
+<meta name='og:description' content={entry.data.description} />
+<meta name='og:title' content={entry.data.title} />
+<meta
+  name='og:image'
+  content={`${process.env.BASE_URL}/images/social-share-cover.jpg`}
+/>
+<meta name='twitter:card' content='summary_large_image' />
+
+<Layout>
+  <div class='lesson-container'>
+    <div class='lesson'>
+      <div class='lesson-content'>
+        <Content />
+      </div>
+      <div class='lesson-links'>
+        {
+          prevSlug ? (
+            <a href={"../" + prevSlug} class='prev'>
+              &larr; Previous
+            </a>
+          ) : null
+        }
+        {
+          nextSlug ? (
+            <a href={"../" + nextSlug} class='next'>
+              Next &rarr;
+            </a>
+          ) : null
+        }
+      </div>
+    </div>
+    <Corner />
+  </div>
+</Layout>
